@@ -1,0 +1,34 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DAH Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { background: #111; color: #eee; font-family: sans-serif; padding: 1em; }
+        input, button { font-size: 1.1em; padding: 0.5em; margin: 0.5em; width: 90%; }
+        #output { margin-top: 1em; background: #222; padding: 1em; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <h1>🤖 DAH Assistant</h1>
+    <input type="text" id="tool" placeholder="Enter command (e.g. autobread)">
+    <button onclick="runTool()">Run</button>
+    <div id="output"></div>
+
+    <script>
+        function runTool() {
+            const tool = document.getElementById("tool").value.trim();
+            fetch("/run", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ tool })
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("output").textContent = data.output || data.error;
+            });
+        }
+    </script>
+</body>
+</html>
